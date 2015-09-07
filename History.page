@@ -1,0 +1,65 @@
+<apex:page controller="HistoryController" tabStyle="Account">
+	<apex:form title="HISTORY">
+
+		<apex:pageBlock id="b1">
+			<apex:pageBlockSection >
+				<apex:pageBlockSectionItem >
+					<apex:commandButton value="Display History" action="{!showHistory}"
+						reRender="p1,p3,b1" status="load" />
+					<apex:actionStatus id="load" style="align:center;">
+						<apex:facet name="start">
+							<apex:image url="{!$Resource.Loading}" width="100" height="100" />
+						</apex:facet>
+					</apex:actionStatus>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem id="IdOfClear">
+					<apex:commandButton value="Clear" action="{!clearAll}"
+						rendered="{!renClear}" reRender="p1,p2,p3" status="load" />
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+
+		<apex:outputPanel id="p1">
+			<apex:pageBlock id="b2" rendered="{!rend2}">
+				<apex:pageBlockSection >
+					<apex:pageBlockTable value="{!searchList}" var="query">
+						<apex:column >
+							<apex:facet name="header">Search Query Results</apex:facet>
+							<apex:commandLink value="{!query.Mail_Body__c}"
+								action="{!showResults}" reRender="p2,b3">
+								<apex:param name="queryId" value="{!query.Id}" />
+							</apex:commandLink>
+						</apex:column>
+					</apex:pageBlockTable>
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+		</apex:outputPanel>
+
+		<apex:outputPanel id="p2">
+			<apex:pageblock id="b3" rendered="{!rend3}">
+				<apex:pageBlockTable value="{!resList }" var="response" columns="3">
+					<apex:column value="{!response.Title__c}" />
+					<apex:column value="{!response.Links__c}" />
+					<apex:column value="{!response.Snippet__c}" />
+				</apex:pageBlockTable>
+			</apex:pageblock>
+		</apex:outputPanel>
+
+<!-- 				<apex:outputPanel Id="p3"> -->
+<!-- 					<apex:pageblock Id="b4" rendered="{!rend4}"> -->
+<!-- 						<apex:commandButton value="<<" action="{!first}" /> -->
+<!-- 						<apex:commandButton value="<" action="{!previous}" /> -->
+<!-- 						<apex:commandButton value=">" action="{!next}" /> -->
+<!-- 						<apex:commandButton value=">>" action="{!last}" /> -->
+<!-- 					</apex:pageblock> -->
+<!-- 				</apex:outputPanel> -->
+
+		<apex:panelGrid columns="4">
+			<apex:commandLink action="{!first}">First</apex:commandlink>
+				<apex:commandLink action="{!previous}" rendered="{!hasPrevious}">Previous</apex:commandlink>
+					<apex:commandLink action="{!next}" rendered="{!hasNext}">Next</apex:commandlink>
+						<apex:commandLink action="{!last}">Last</apex:commandlink>
+		</apex:panelGrid>
+
+	</apex:form>
+</apex:page>
